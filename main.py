@@ -24,7 +24,7 @@ if __name__ == "__main__":
     totalmem = 0
     for i in range(1000):
         start = time.time()
-        path = "insurance.csv"
+        path = "rust_analysis/insurance.csv"
         ins_df = load(path)
         statistics = get_data_descriptive_stats(ins_df, "charges")
 
@@ -35,6 +35,7 @@ if __name__ == "__main__":
         totalmem += mem_usage.percent
         totaltime += duration
 
+    print(statistics)
     print(f"Elapsed time: {totaltime/1000:.4f} seconds")
     print(f"CPU Usage: {cpu_usage}%")
     print(f"Memory Usage: {round(totalmem/1000,2)}%")

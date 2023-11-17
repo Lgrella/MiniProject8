@@ -1,0 +1,12 @@
+[package]
+name = "rust_analysis"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+csv = "1.1"
+polars = "0.14"
+plotters = "0.3"
+sys-info = "0.7"

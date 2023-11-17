@@ -1,41 +1,73 @@
-mod lib; // Import the lib module
 use csv::ReaderBuilder;
 use std::error::Error;
 use std::fs::File;
 use std::process::Command;
 use std::time::Instant;
 
+pub struct Statistics {
+    pub mean: f64,
+    pub median: f64,
+    pub std: f64,
+    pub size: usize,
+}
+
+pub fn compute_statistics(data: &Vec<f64>) -> Statistics {
+    let size = data.len();
+    let sum: f64 = data.iter().sum();
+    let mean = sum / size as f64;
+
+    let mut sorted_data = data.clone();
+    sorted_data.sort_by(|a, b| a.partial_cmp(b).unwrap());
+
+    let median = if size % 2 == 1 {
+        sorted_data[size / 2]
+    } else {
+        (sorted_data[size / 2 - 1] + sorted_data[size / 2]) / 2.0
+    };
+
+    let variance: f64 = data.iter().map(|&x| (x - mean).powi(2)).sum::<f64>() / size as f64;
+    let std = variance.sqrt();
+
+    Statistics {
+        mean,
+        median,
+        std,
+        size,
+    }
+}
+
+
 fn main() -> Result<(), Box<dyn Error>> {
     let start_time = Instant::now();
     // 1. Read the cars.csv file
-    let file = File::open("cars.csv")?;
+    let file = File::open("insurance.csv")?;
 
     // Create the CSV reader with the specified delimiter
     let mut rdr = ReaderBuilder::new()
-        .delimiter(b';') // Set the delimiter to ;
+        .delimiter(b',') // Set the delimiter to ;
         .has_headers(true)
         .from_reader(file);
 
     // Find the index of first
     let headers = rdr.headers()?;
-    let weight_index = headers
+    let charges_index = headers
         .iter()
-        .position(|h| h == "Weight")
-        .ok_or("Weight column not found")?;
+        .position(|h| h == "charges")
+        .ok_or("charges column not found")?;
 
-    // 2. Extract the "Weight" column from the CSV data
-    let mut weights: Vec<f64> = Vec::new();
+    // 2. Extract the "charges" column from the CSV data
+    let mut charges1: Vec<f64> = Vec::new();
     for result in rdr.records() {
         let record = result?;
-        if let Some(weight_str) = record.get(weight_index) {
-            if let Ok(weight) = weight_str.parse::<f64>() {
-                weights.push(weight);
+        if let Some(charges_str) = record.get(charges_index) {
+            if let Ok(charges) = charges_str.parse::<f64>() {
+                charges1.push(charges);
             }
         }
     }
 
     // 3. Compute the statistics
-    let stats = lib::compute_statistics(&weights);
+    let stats = compute_statistics(&charges1);
     println!("Mean: {}", stats.mean);
     println!("Median: {}", stats.median);
     println!("Standard Deviation: {}", stats.std);
