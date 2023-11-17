@@ -1,37 +1,46 @@
-[![CI](https://github.com/nogibjj/python-ruff-template/actions/workflows/cicd.yml/badge.svg)](https://github.com/nogibjj/python-ruff-template/actions/workflows/cicd.yml)
-## Template for Python projects with RUFF linter
+# Mini Project 8 - Data Engineering Systems
 
-![1 15_rust_built_python_tools](https://github.com/nogibjj/python-ruff-template/assets/58792/db5f7bda-a977-4c67-acbe-a70fe034fbdf)
+The purpose of this exercise is to transform python code into rust code and investigate the storage and runtime differences between the two languages. 
 
+I chose to perform relatively simple descriptive statistics: mean, median, and standard deviation on the insurances.csv file found on Kaggle [here](https://www.kaggle.com/datasets/mirichoi0218/insurance).This data source looks at the personal medical costs for individual people, providing additional attributes for each person (like age, smoker status, gender).
 
+# Process:
+**1. Set-Up Python Environment:**
+*  The dockerfile and the dev container provided in this repository set up a standard python environment. This is needed so we are able to run our python code.
+*  Opening codespaces will automatically set up the python environment, but also will install all of the dependencies.
+**2. Set-Up Rust within this Environment:**
+*  First, we must run the following in the terminal. This installs rust.
+```
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs/ | sh
+```
+* Next, we must configure the current shell by running the following also in the terminal.
+```
+source "$HOME/.cargo/env"
+```
+*  To create a rust space to work in, again run the following in the terminal to create a folder for rust programs. Cargo is rust's build tool. This will create a Cargo.toml file that will need to be updated with any dependencies needed for the analysis programs to run. This step also creates a src folder containing a main.rs script. This will be the starting point for any new programs.
+```
+cargo new rust_analysis
+```
+# Running the Programs:
+**1. Running Rust Programs**
+*  In the terminal navigate to the main rust folder (in this case rust_analysis). To determine where you should navigate, make sure the final destination is where the Cargo.toml file is located.
+*  To run your program, execute cargo run in the terminal.
 
-1. First thing to do on launch is to open a new shell and verify virtualenv is sourced.
+**2. Running Python Programs**
+*  Moving back to the main directory, run "python main.py" in the terminal to execute the main.py program.'
 
-Things included are:
+# Analysis
 
-* `Makefile`
+As stated above, the program I created (in both Python and Rust) solely has the purpose of grabbing the descriptive statistics from the "charges" column of the insurance.csv file. As someone who is new to Rust, I used github copilot chat and github copilot labs to transform my python code into rust code. 
 
-* `Pytest`
+After running both, I got the below descriptive statistics and usage information. These programs are narrow in scope so I do not end up seeing much difference in any of the usage/execution information.
+Knowing the perks of rust as an extremely efficient language, I expect as programs get larger and more complex that rust execution time will be significantly less than that of python.
 
-* `pandas`
+**Python Execution:**
+![PythonExe](pythonrun.png)
 
-* `Ruff`:  
-
-Run `make lint` which runs `ruff check`.  You can find out more info on [Ruff here](https://github.com/astral-sh/ruff).
-
-* `Dockerfile`
-
-* `GitHub copilot`
-
-* `jupyter` and `ipython` 
-
-* A base set of libraries for devops and web
-
-* `githubactions`
-
-## References
-
-![1 1-function-essence-of-programming](https://github.com/nogibjj/python-ruff-template/assets/58792/f7f33cd3-cff5-4014-98ea-09b6a29c7557)
+**Rust Execution:**
+![PythonExe](rustrun.png)
 
 
 
