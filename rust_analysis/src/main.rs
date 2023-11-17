@@ -26,11 +26,11 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     //let cpu = 0;
     let mem = sys_info::mem_info().unwrap();
-    let mem_usage_mb = (mem.total - mem.avail) / 1024;  // Convert to MB
-    let execution_time = start_time.elapsed();
+    let mem_usage_perc = ((mem.total - mem.avail) as f64 / mem.total as f64) * 100.0;
+    let execution_time = start_time.elapsed().as_secs_f64() * 1000.0;
 
     println!("Mean: {}, Median: {}, Std Dev: {}", mean, median, std_dev);
-    println!("Memory Usage: {}, Execution Time: {:?}", mem_usage_mb, execution_time);
+    println!("Memory Usage: {}, Execution Time: {:?}", mem_usage_perc, execution_time);
 
     Ok(())
 }
