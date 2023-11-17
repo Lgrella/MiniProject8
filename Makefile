@@ -21,5 +21,9 @@ refactor: format lint
 
 deploy:
 	#deploy goes here
+
+build-rust:
+	cargo build --release
+
 		
-all: install lint test format deploy
+all: install lint test format deploy build-rust

@@ -1,19 +1,40 @@
-"""
-Main cli or app entry point
-"""
+import pandas as pd  # data manipulation and analysis
+import time
+import psutil
 
-from mylib.calculator import add
-import click
 
-#var=1;var=2
+def load(filepath):
+    df = pd.read_csv(filepath)
+    return df
 
-@click.command("add")
-@click.argument("a", type=int)
-@click.argument("b", type=int)
-def add_cli(a, b):
-    click.echo(add(a, b))
+
+def get_data_descriptive_stats(dataframe, column):
+    statistics = {
+        "Mean": dataframe[column].mean(),
+        "Median": dataframe[column].median(),
+        "StdDev": dataframe[column].std(),
+        "Min": dataframe[column].min(),
+        "Max": dataframe[column].max(),
+    }
+    return pd.Series(statistics)
 
 
 if __name__ == "__main__":
-    # pylint: disable=no-value-for-parameter
-    add_cli()
+    totaltime = 0
+    totalmem = 0
+    for i in range(1000):
+        start = time.time()
+        path = "insurance.csv"
+        ins_df = load(path)
+        statistics = get_data_descriptive_stats(ins_df, "charges")
+
+        end = time.time()
+        duration = end - start
+        cpu_usage = psutil.cpu_percent()
+        mem_usage = psutil.virtual_memory()
+        totalmem += mem_usage.percent
+        totaltime += duration
+
+    print(f"Elapsed time: {totaltime/1000:.4f} seconds")
+    print(f"CPU Usage: {cpu_usage}%")
+    print(f"Memory Usage: {round(totalmem/1000,2)}%")
